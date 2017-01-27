@@ -30,6 +30,12 @@ module SlackEstimateBot
     # config.i18n.default_locale = :de
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
+    config.autoload_paths << Rails.root.join('bot')
+    config.generators do |g|
+      g.stylesheets false
+      g.javascripts false
+      g.helpers false
+    end
     config.active_record.raise_in_transactional_callbacks = true
   end
 end
