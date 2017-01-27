@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'slack_bot_server'
+require 'slack_bot_server/redis_queue'
+require 'estimate_bot'
+
+queue = SlackBotServer::RedisQueue.new
+server = SlackBotServer::Server.new(queue: queue)
+
+server.on_add do |token, team|
+  EstimateBot.new(token: token, team: team)
+end
+
+Team.find_each do |team|
+  server.add_bot(team.bot_access_token, team)
+end
+
+server.start
