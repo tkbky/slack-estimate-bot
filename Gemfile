@@ -58,8 +58,17 @@ group :development, :test do
 end
 
 group :test do
-  # one-liners tests
+  # One-liners tests
   gem 'shoulda-matchers', '~> 3.1'
+
+  # Manage environment
+  gem 'climate_control'
+
+  # # Stubbing HTTP requests
+  # gem 'webmock'
+  #
+  # # Record & Replay test suite's HTTP Requests
+  # gem 'vcr'
 end
 
 group :development do
