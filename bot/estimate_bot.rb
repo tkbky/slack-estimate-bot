@@ -62,7 +62,7 @@ class EstimateBot < SlackBotServer::Bot
           }
         ]
 
-        say_to estimator_id, text: "What is your estimation for \"#{story.title}\"", attachments: attachments
+        say_to estimator_id, text: "What is your estimation for *\"#{story.title}\"*", attachments: attachments, mrkdwn: true
       end
     else
       reply text: "Sorry, I don't understand this command! \"#{data['message']}\""

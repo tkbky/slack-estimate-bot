@@ -22,6 +22,9 @@ RSpec.describe Api::EstimatesController, type: :controller do
 
     let(:payload) do
       {
+        team: {
+          id: team.slack_id
+        },
         actions: [
           {
             value: expected_point
@@ -49,6 +52,7 @@ RSpec.describe Api::EstimatesController, type: :controller do
       ]
     end
 
+    let(:team) { create(:team) }
     let(:estimate) { create(:estimate) }
     let(:token) { 'token' }
     let(:expected_point) { 1 }
@@ -70,7 +74,7 @@ RSpec.describe Api::EstimatesController, type: :controller do
     it { expect(expected_json[:replace_original]).to be true }
     it { expect(expected_json[:delete_original]).to be false }
     it { expect(expected_json[:response_type]).to eq('in_channel') }
-    it { expect(expected_json[:attachments].first[:text]).to eq("You gave an estimation of #{expected_point} point. Thank you for your time.") }
+    it { expect(expected_json[:attachments].first[:text]).to eq("You gave an estimation of *#{expected_point} point*. Thank you for your time.") }
     it { expect(expected_json[:attachments].first[:actions]).to be_empty }
 
   end

@@ -9,4 +9,8 @@ class Estimate < ActiveRecord::Base
   validates :user_slack_id, presence: true, uniqueness: { scope: :story_id }
   validates :point, inclusion: { in: POINTS }, if: -> { point.present? }
   validates :status, presence: true, inclusion: { in: STATUSES }
+
+  def pending?
+    status == 'pending'
+  end
 end
