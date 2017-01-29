@@ -9,8 +9,7 @@ class EstimateBot < SlackBotServer::Bot
     super(token: token)
   end
 
-  # FIXME: put a nice icon
-  # icon_url 'http://my.server.example.com/assets/icon.png'
+  icon_url ENV['BOT_ICON_URL']
 
   on_mention do |data|
     if data['message'] =~ /\Aestimate\s+\X(.*)\X\s+(.*)/
