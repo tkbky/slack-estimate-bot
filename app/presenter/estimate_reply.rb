@@ -1,23 +1,22 @@
 # frozen_string_literal: true
-class Estimate::Disclose
+class EstimateReply
   include ActionView::Helpers::TextHelper
 
-  attr_reader :payload, :team, :estimate, :story
+  attr_reader :payload
 
   def initialize(payload)
     @payload = payload
-    @team = Team.find_by!(slack_id: payload[:team][:id])
-    @estimate = Estimate.find(payload[:callback_id])
-    @story = estimate.story
   end
 
-  def call
-    @estimate.update!(point: point, status: 'completed')
-    Estimate::Summarize.new(team, story).call unless story.estimates.any?(&:pending?)
-    [payload, attachment]
+  def to_h
+    { text: text, replace_original: true, delete_original: false, response_type: :in_channel, attachments: [attachment] }
   end
 
   private
+
+  def text
+    payload[:original_message][:text]
+  end
 
   def point
     payload[:actions].first[:value]

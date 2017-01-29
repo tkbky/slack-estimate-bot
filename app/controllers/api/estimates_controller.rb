@@ -2,8 +2,18 @@
 require 'slack_bot_server/remote_control'
 
 class Api::EstimatesController < Api::BaseController
+  before_action :prepare_team
+
   def create
-    payload, attachment = Estimate::Disclose.new(@payload).call
-    render json: { text: payload[:original_message][:text], replace_original: true, delete_original: false, response_type: :in_channel, attachments: [attachment] }, status: :ok
+    @estimate = Estimate.find(@payload[:callback_id])
+    reply = ReplyEstimate.new(@payload, @estimate).call!
+    SlackRemote.new(@team.bot_access_token).say(channel: "##{@team.incoming_webhook_channel}", text: EstimateSummary.new(@estimate.story).to_s) unless @estimate.story.estimates.any?(&:pending?)
+    render json: reply.to_h, status: :ok
+  end
+
+  private
+
+  def prepare_team
+    @team = Team.find_by!(slack_id: @payload[:team][:id])
   end
 end
