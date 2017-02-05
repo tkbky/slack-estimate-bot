@@ -23,7 +23,7 @@ class EstimateBot < SlackBotServer::Bot
           {
             "text": 'Choose one of the following estimation points',
             "fallback": 'You are unable to estimate',
-            "callback_id": estimate.id, # FIXME: use UUID
+            "callback_id": estimate.reload.uuid,
             "color": '#3AA3E3',
             "attachment_type": 'default',
             "actions": [

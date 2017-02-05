@@ -31,7 +31,7 @@ RSpec.describe Api::EstimatesController, type: :controller do
           }
         ],
         token: token,
-        callback_id: estimate.id,
+        callback_id: estimate.uuid,
         original_message: {
           text: expected_message_text,
           attachments: attachments
