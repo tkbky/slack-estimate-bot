@@ -11,23 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170205020609) do
+ActiveRecord::Schema.define(version: 20170205020936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "estimates", force: :cascade do |t|
-    t.integer  "point",         default: 0,         null: false
+    t.integer  "point",         default: 0,                    null: false
     t.integer  "story_id"
-    t.string   "user_slack_id",                     null: false
-    t.string   "status",        default: "pending", null: false
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.string   "user_slack_id",                                null: false
+    t.string   "status",        default: "pending",            null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.uuid     "uuid",          default: "uuid_generate_v4()"
   end
 
   add_index "estimates", ["story_id"], name: "index_estimates_on_story_id", using: :btree
   add_index "estimates", ["user_slack_id", "story_id"], name: "index_estimates_on_user_slack_id_and_story_id", unique: true, using: :btree
+  add_index "estimates", ["uuid"], name: "index_estimates_on_uuid", unique: true, using: :btree
 
   create_table "stories", force: :cascade do |t|
     t.string   "title",      null: false

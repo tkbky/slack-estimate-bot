@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :estimate do
+    uuid { SecureRandom.uuid }
     point 0
     status 'pending'
     association :story, factory: :story, strategy: :build
@@ -10,6 +11,7 @@ FactoryGirl.define do
     end
 
     trait :invalid do
+      uuid ''
       point -1
       story nil
       user_slack_id ''
