@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126031239) do
+ActiveRecord::Schema.define(version: 20170205020609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "estimates", force: :cascade do |t|
     t.integer  "point",         default: 0,         null: false
