@@ -28,42 +28,132 @@ RSpec.describe OauthsController, type: :controller do
 
     let(:code) { 'code' }
 
-    context 'when success' do
+    context 'when add to slack' do
 
-      let(:ok) { true }
+      before do
+        allow(resp).to receive(:user) { nil }
+      end
 
-      before { get :show, code: code }
+      context 'when success' do
 
-      it { expect(response).to redirect_to(root_path) }
-      it { expect(controller).to set_flash[:success] }
+        let(:ok) { true }
+
+        before { get :show, code: code }
+
+        it { expect(response).to redirect_to(me_dashboard_path) }
+        it { expect(controller).to set_flash[:success] }
+
+      end
+
+      context 'when success but create team fail' do
+
+        let(:ok) { true }
+
+        before do
+          allow(resp).to receive(:team_name) { '' }
+        end
+
+        before { get :show, code: code }
+
+        it { expect(response).to redirect_to(root_path) }
+        it { expect(controller).to set_flash[:danger] }
+
+      end
+
+      context 'when success & team already exist' do
+
+        let(:ok) { true }
+
+        before do
+          create(:team, slack_id: 'team_id')
+          get :show, code: code
+        end
+
+        it { expect(response).to redirect_to(me_dashboard_path) }
+        it { expect(controller).to set_flash[:success] }
+
+      end
+
+      context 'when fail' do
+
+        let(:ok) { false }
+
+        before do
+          allow(resp).to receive(:error) { 'error' }
+          get :show, code: code
+        end
+
+        it { expect(response).to redirect_to(root_path) }
+        it { expect(controller).to set_flash[:danger] }
+
+      end
 
     end
 
-    context 'when success & team already exist' do
+    context 'when sign in with slack' do
 
-      let(:ok) { true }
-
-      before do
-        create(:team, slack_id: 'team_id')
-        get :show, code: code
-      end
-
-      it { expect(response).to redirect_to(root_path) }
-      it { expect(controller).to set_flash[:success] }
-
-    end
-
-    context 'when fail' do
-
-      let(:ok) { false }
+      let(:user) { double('user') }
 
       before do
-        allow(resp).to receive(:error) { 'error' }
-        get :show, code: code
+        allow(resp).to receive(:user) { user }
+        allow(user).to receive(:name) { 'name' }
+        allow(user).to receive(:email) { 'email' }
+        allow(user).to receive(:id) { 'id' }
       end
 
-      it { expect(response).to redirect_to(root_path) }
-      it { expect(controller).to set_flash[:alert] }
+      context 'when success' do
+
+        let(:ok) { true }
+
+        before { get :show, code: code }
+
+        it { expect(response).to redirect_to(me_dashboard_path) }
+        it { expect(controller).to set_flash[:success] }
+
+      end
+
+      context 'when success but create user fail' do
+
+        let(:ok) { true }
+
+        before do
+          allow(user).to receive(:name) { '' }
+        end
+
+        before { get :show, code: code }
+
+        it { expect(response).to redirect_to(root_path) }
+        it { expect(controller).to set_flash[:danger] }
+
+      end
+
+      context 'when success & user already exist' do
+
+        let(:ok) { true }
+
+        before do
+          create(:team, slack_id: 'team_id')
+          get :show, code: code
+        end
+
+        it { expect(response).to redirect_to(me_dashboard_path) }
+        it { expect(controller).to set_flash[:success] }
+
+      end
+
+      context 'when fail' do
+
+        let(:ok) { false }
+
+        before do
+          allow(resp).to receive(:error) { 'error' }
+          get :show, code: code
+        end
+
+        it { expect(response).to redirect_to(root_path) }
+        it { expect(controller).to set_flash[:danger] }
+
+      end
 
     end
 
