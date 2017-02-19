@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170205020936) do
+ActiveRecord::Schema.define(version: 20170219053726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,17 @@ ActiveRecord::Schema.define(version: 20170205020936) do
   end
 
   add_index "teams", ["slack_id", "incoming_webhook_channel"], name: "index_teams_on_slack_id_and_incoming_webhook_channel", unique: true, using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",      null: false
+    t.string   "name",       null: false
+    t.string   "slack_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["slack_id"], name: "index_users_on_slack_id", unique: true, using: :btree
 
   add_foreign_key "estimates", "stories"
   add_foreign_key "stories", "teams"

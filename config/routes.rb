@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     resource :estimate, only: [:create]
   end
 
+  namespace :me do
+    resource :dashboard, only: [:show]
+  end
+
   root 'pages#landing'
 
 end
