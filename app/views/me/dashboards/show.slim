@@ -6,3 +6,15 @@
       hr
 
       p Hi, #{current_user.name}
+
+      .table-responsive
+        table.table.table-striped
+          thead
+            tr
+              th Team Name
+              th Team ID
+          tbody
+            - current_user.teams.each do |team|
+              tr
+                td = team.name
+                td = team.slack_id
