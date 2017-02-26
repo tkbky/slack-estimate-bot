@@ -93,12 +93,16 @@ RSpec.describe OauthsController, type: :controller do
     context 'when sign in with slack' do
 
       let(:user) { double('user') }
+      let(:slack_team) { double('slack_team') }
+      let(:team) { create(:team) }
 
       before do
         allow(resp).to receive(:user) { user }
         allow(user).to receive(:name) { 'name' }
         allow(user).to receive(:email) { 'email' }
-        allow(user).to receive(:id) { 'id' }
+        allow(user).to receive(:id) { 'user id' }
+        allow(resp).to receive(:team) { slack_team }
+        allow(slack_team).to receive(:id) { team.slack_id }
       end
 
       context 'when success' do

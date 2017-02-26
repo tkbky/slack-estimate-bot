@@ -10,6 +10,10 @@ Rails.application.routes.draw do
     resource :dashboard, only: [:show]
   end
 
+  namespace :team do
+    resources :stories, only: [:index]
+  end
+
   root 'pages#landing'
 
 end

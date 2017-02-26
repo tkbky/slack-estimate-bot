@@ -6,3 +6,17 @@
       hr
 
       p Hi, #{current_user.name}
+
+      .table-responsive
+        table.table.table-striped
+          thead
+            tr
+              th Team Name
+              th Team ID
+              th
+          tbody
+            - current_user.teams.each do |team|
+              tr
+                td = team.name
+                td = team.slack_id
+                td = link_to 'Stories', team_stories_path(team_id: team.id), class: 'btn btn-primary'

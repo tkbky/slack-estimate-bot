@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170219053726) do
+ActiveRecord::Schema.define(version: 20170226041443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,17 @@ ActiveRecord::Schema.define(version: 20170219053726) do
   end
 
   add_index "stories", ["team_id"], name: "index_stories_on_team_id", using: :btree
+
+  create_table "team_memberships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "team_memberships", ["team_id"], name: "index_team_memberships_on_team_id", using: :btree
+  add_index "team_memberships", ["user_id", "team_id"], name: "index_team_memberships_on_user_id_and_team_id", unique: true, using: :btree
+  add_index "team_memberships", ["user_id"], name: "index_team_memberships_on_user_id", using: :btree
 
   create_table "teams", force: :cascade do |t|
     t.string   "slack_id",                                 null: false
@@ -69,4 +80,6 @@ ActiveRecord::Schema.define(version: 20170219053726) do
 
   add_foreign_key "estimates", "stories"
   add_foreign_key "stories", "teams"
+  add_foreign_key "team_memberships", "teams"
+  add_foreign_key "team_memberships", "users"
 end
