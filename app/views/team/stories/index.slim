@@ -1,0 +1,20 @@
+.container
+  .row
+    .col-xs-12
+      h1 Stories
+
+      hr
+
+      .table-responsive
+        table.table.table-striped
+          thead
+            tr
+              th #
+              th Story Title
+              th Created At
+          tbody
+            - @stories.each do |story|
+              tr
+                td = story.id
+                td = story.title
+                td = story.created_at
