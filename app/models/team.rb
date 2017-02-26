@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Team < ActiveRecord::Base
   has_many :stories, inverse_of: :team
+  has_many :team_memberships
+  has_many :users, through: :team_memberships
 
   validates :slack_id, presence: true, uniqueness: { scope: :incoming_webhook_channel }
   validates :name, presence: true
