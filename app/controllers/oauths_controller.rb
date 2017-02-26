@@ -15,13 +15,14 @@ class OauthsController < ApplicationController
   private
 
   def find_or_create_user(resp)
+    team = Team.find_by!(slack_id: resp.team.id)
     user = User.create_with(
       name: resp.user.name,
       email: resp.user.email,
       slack_id: resp.user.id
     ).find_or_initialize_by(email: resp.user.email, slack_id: resp.user.id)
 
-    if user.save
+    if user.save && team.team_memberships.find_or_create_by(user: user)
       session[:user_id] = user.id
       redirect_to me_dashboard_path, flash: { success: 'Signed in successfully' }
     else
