@@ -4,7 +4,7 @@ require 'slack_bot_server'
 require 'slack_bot_server/redis_queue'
 require 'estimate_bot'
 
-queue = SlackBotServer::RedisQueue.new
+queue = SlackBotServer::RedisQueue.new(redis: Redis.new(url: ENV['REDIS_URL']))
 server = SlackBotServer::Server.new(queue: queue)
 
 server.on_add do |token, team|
