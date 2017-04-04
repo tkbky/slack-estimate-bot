@@ -6,7 +6,8 @@ class SlackRemote
 
   def initialize(token)
     @token = token
-    @remote = SlackBotServer::RemoteControl.new(queue: SlackBotServer::RedisQueue.new)
+    queue = SlackBotServer::RedisQueue.new(redis: Redis.new(url: ENV['REDIS_URL']))
+    @remote = SlackBotServer::RemoteControl.new(queue: queue)
   end
 
   def say(channel:, text:)
