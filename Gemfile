@@ -51,7 +51,7 @@ group :development, :test do
   gem 'dotenv-rails'
 
   # Ruby static code analyzer
-  gem 'rubocop', '~> 0.47.1', require: false
+  gem 'rubocop', '~> 0.49.0', require: false
 
   # RSpec static code analyzer
   gem 'rubocop-rspec'
